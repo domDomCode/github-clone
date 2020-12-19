@@ -15,6 +15,7 @@ query GetRepoList($queryString: String!) {
     edges {
       node {
         ... on Repository {
+          id
           name
           description
           primaryLanguage {
@@ -22,7 +23,6 @@ query GetRepoList($queryString: String!) {
           }
           viewerHasStarred
           forkCount
-          databaseId
           isFork
           isArchived
           isMirror
@@ -52,7 +52,7 @@ export interface RepoInterface {
     isFork: boolean;
     isMirror: boolean;
     licenseInfo: string;
-    databaseId: number;
+    id: string;
     name: string;
     primaryLanguage: PrimaryLanguageInterface;
     stargazerCount: number;
@@ -74,7 +74,7 @@ const RepoList: FC = () => {
       <Filters getRepoList={getRepoListDebounced} />
       <div>
         {data?.search.edges.map((repo: RepoInterface) =>
-          <RepoItem key={repo.node.databaseId} repo={repo} />)}
+          <RepoItem key={repo.node.id} repo={repo} />)}
       </div>
     </div>
   );
