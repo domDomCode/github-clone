@@ -2,9 +2,9 @@ import React from 'react';
 import './App.css';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { BaseStyles, Box, Heading} from '@primer/components'
+import { BaseStyles } from '@primer/components'
 
-import MainView from './MainView/index';
+import RepoList from './RepoList/RepoList';
 
 const httpLink = createHttpLink({
   uri: 'https://api.github.com/graphql',
@@ -31,7 +31,7 @@ function App() {
     <div className="App">
       <ApolloProvider client={client}>
         <BaseStyles>
-          <MainView />
+          <RepoList />
         </BaseStyles>
       </ApolloProvider>
     </div>
