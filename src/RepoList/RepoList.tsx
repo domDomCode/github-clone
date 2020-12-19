@@ -4,8 +4,8 @@ import RepoItem from './RepoItem/index';
 import { gql, useLazyQuery } from '@apollo/client';
 import { useDebouncedCallback } from 'use-debounce';
 
-const GET_REPOS_BY_USER = gql`
-query GetReposByUser($queryString: String!) {
+const GET_REPO_LIST = gql`
+query GetRepoList($queryString: String!) {
   search(
     query: $queryString, 
     type: REPOSITORY,
@@ -22,6 +22,7 @@ query GetReposByUser($queryString: String!) {
           }
           viewerHasStarred
           forkCount
+          databaseId
           isFork
           isArchived
           isMirror
@@ -36,7 +37,7 @@ query GetReposByUser($queryString: String!) {
 }
 `;
 
-export interface ReposByNameResponseInterface {
+export interface RepoListResponseInterface {
   search: {
     repositoryCount: number;
     edges: RepoInterface[];
@@ -64,13 +65,13 @@ interface PrimaryLanguageInterface {
 }
 
 const RepoList: FC = () => {
-  const [ getReposByName, { loading, error, data } ] = useLazyQuery<ReposByNameResponseInterface>(GET_REPOS_BY_USER);
+  const [ getRepoList, { loading, error, data } ] = useLazyQuery<RepoListResponseInterface>(GET_REPO_LIST);
 
-  const getReposByNameDebounced = useDebouncedCallback(getReposByName, 500);
+  const getRepoListDebounced = useDebouncedCallback(getRepoList, 500);
 
   return (
     <div>
-      <Filters getReposByNameDebounced={getReposByNameDebounced} />
+      <Filters getRepoList={getRepoListDebounced} />
       <div>
         {data?.search.edges.map((repo: RepoInterface) =>
           <RepoItem key={repo.node.databaseId} repo={repo} />)}
