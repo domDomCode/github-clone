@@ -1,8 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { RepoInterface } from '../RepoList';
-import { Box, Button as PrimerButton, Grid, Link, Text } from '@primer/components';
+import { Box, Button, Link, Text } from '@primer/components';
 import { gql, useMutation } from '@apollo/client';
-import { border } from 'styled-system';
 import { differenceInCalendarDays, format, parseISO } from 'date-fns';
 import { LawIcon, RepoForkedIcon, StarFillIcon, StarIcon } from '@primer/octicons-react';
 
@@ -153,7 +152,7 @@ const RepoItem: FC<Props> = ({ repo }) => {
         </Box>
       </Box>
       <Box>
-        <PrimerButton
+        <Button
           display={'flex'}
           style={{ alignItems: 'center' }}
           color={'gray.6'}
@@ -161,7 +160,7 @@ const RepoItem: FC<Props> = ({ repo }) => {
         >
           {isStarred ? <StarFillIcon size={16}/> : <StarIcon size={16}/>}
           <Text color={'gray.6'} pl={1}>Star</Text>
-        </PrimerButton>
+        </Button>
       </Box>
     </Box>
   );

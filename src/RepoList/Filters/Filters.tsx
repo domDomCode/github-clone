@@ -1,7 +1,7 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, FormGroup, SelectMenu, TextInput } from '@primer/components';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { Box, Button, Text, SelectMenu, TextInput, Link } from '@primer/components';
 import { DebouncedState } from 'use-debounce/lib/useDebouncedCallback';
-import { create } from 'domain';
+import { XIcon } from '@primer/octicons-react';
 
 export interface QueryStringFilters {
   repoName: string;
@@ -33,11 +33,9 @@ interface Props {
 }
 
 const Filters: FC<Props> = ({ getRepoList }) => {
-  const [ repoName, setRepoName ] = useState('');
-  const [ activeType, setActiveType ] = useState('');
-  const [ activeLanguage, setActiveLanguage ] = useState('');
-
-  //TODO consider lifting fetch up, and only constructing query here - more semantic I guess
+  const [ repoName, setRepoName ] = useState<string>('');
+  const [ activeType, setActiveType ] = useState<FilterTypesEnum|null>(null);
+  const [ activeLanguage, setActiveLanguage ] = useState<LanguagesEnum|null>(null);
 
   // ensures the useEffect below does not fetch unnecessarily
   const createQueryString = useCallback(() => `
@@ -55,17 +53,37 @@ const Filters: FC<Props> = ({ getRepoList }) => {
   );
 
   return (
-    <div>
-      <FormGroup>
+    <Box width={'100%'} display={'flex'} mb={4}>
+      <Box mr={3} display={'flex'} flexGrow={4} flexBasis={2} justifyContent={'flex-end'}>
         <TextInput
+          width={'100%'}
           placeholder={'Search repos'}
           value={repoName}
           onChange={(e) => setRepoName(e.currentTarget.value)}
         />
-        <SelectMenu>
-          <Button as={'summary'}>Type</Button>
-          <SelectMenu.Modal>
-            <SelectMenu.Header>Select type</SelectMenu.Header>
+      </Box>
+      <Box display={'flex'} justifyContent={'space-between'} flexBasis={1} flexGrow={1}>
+        <SelectMenu mr={2}>
+          <Button as={'summary'}>
+            {activeType
+              ? <>
+                <Text color={'gray.6'}>Type:</Text> {activeType}
+              </>
+              : <Text>Type</Text>}
+          </Button>
+          <SelectMenu.Modal align={'left'}>
+            <SelectMenu.Header>
+              <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Text>Select type</Text>
+                <Link
+                  hoverColor={'gray.8'}
+                  color={'gray.6'}
+                  style={{cursor: 'pointer'}}
+                >
+                  <XIcon size={16}/>
+                </Link>
+              </Box>
+            </SelectMenu.Header>
             <SelectMenu.List>
               {/*TODO replace any*/}
               {Object.values(FilterTypesEnum).map(type =>
@@ -80,7 +98,13 @@ const Filters: FC<Props> = ({ getRepoList }) => {
           </SelectMenu.Modal>
         </SelectMenu>
         <SelectMenu>
-          <Button as={'summary'}>Languages</Button>
+          <Button as={'summary'}>
+            {activeLanguage
+              ? <>
+                <Text color={'gray.6'}>Language:</Text> {activeLanguage}
+              </>
+              : <Text>Languages</Text>}
+          </Button>
           <SelectMenu.Modal>
             <SelectMenu.Header>Select language</SelectMenu.Header>
             <SelectMenu.List>
@@ -95,8 +119,8 @@ const Filters: FC<Props> = ({ getRepoList }) => {
             </SelectMenu.List>
           </SelectMenu.Modal>
         </SelectMenu>
-      </FormGroup>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
