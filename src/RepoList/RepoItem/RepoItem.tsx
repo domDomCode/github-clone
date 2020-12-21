@@ -132,7 +132,7 @@ const RepoItem: FC<Props> = ({ repo }) => {
               </Text>
             </Box>
           ) : null}
-          <Box>{getUpdatedAtInfo()}</Box>
+          {getUpdatedAtInfo()}
         </Box>
       </Box>
       <Box>
