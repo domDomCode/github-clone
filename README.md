@@ -1,46 +1,29 @@
-# Getting Started with Create React App
+Hello!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a small, bootstrapped app that searches repos for a specific user - for simplicity, hardcoded (gaearon).
 
-## Available Scripts
+App is written in React + Typescript. There was no need for any state management solution.
 
-In the project directory, you can run:
+I have decided on using GraphQL API - I do not have much experience with it but hey, now's as good a time as any to start getting some!
+
+To make it look as closely to the original as possible, I have used Github's own design system - Primer. I am unlikely to return to it (there are better alternatives) and the docs leave much to be desired.
+
+### Running the app
+
+From the root directory: 
+
+### `.env`
+
+Not super safe to store the key in an environment variable but good enough for development purposes.
+
+First generate a github API key, follow these instructions: https://docs.github.com/en/free-pro-team@latest/graphql/guides/forming-calls-with-graphql#authenticating-with-graphql
+
+Then using `.env.example` as a template, paste the key where specified.
+
+### `docker-compose up -d --build`
+
+App is containerized - it exposes port 3001 externally.
 
 ### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Traditional way to start a development server.
