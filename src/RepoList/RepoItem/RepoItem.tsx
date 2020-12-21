@@ -1,55 +1,21 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
-import { RepoInterface } from '../RepoList';
 import { Box, Button, Link, Text } from '@primer/components';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { differenceInCalendarDays, format, parseISO } from 'date-fns';
 import { LawIcon, RepoForkedIcon, StarFillIcon, StarIcon } from '@primer/octicons-react';
 
-const ADD_STAR = gql`
-mutation AddStar($repoId: ID!) {
-  addStar(input:{starrableId:$repoId}) {
-    starrable{
-      viewerHasStarred
-    }
-  }
-}
-`;
+import { AddStarResponseInterface, RemoveStarResponseInterface, RepoInterface } from '../../types/types';
+import { ADD_STAR, REMOVE_STAR } from './query';
 
-const REMOVE_STAR = gql`
-mutation RemoveStar($repoId: ID!) {
-  removeStar(input:{starrableId:$repoId}) {
-    starrable{
-      viewerHasStarred
-    }
-  }
-}
-`;
-
-interface AddStarResponseInterface {
-  addStar: {
-    starrable: {
-      viewerHasStarred: boolean;
-    }
-  }
-}
-
-interface RemoveStarResponseInterface {
-  removeStar: {
-    starrable: {
-      viewerHasStarred: boolean;
-    }
-  }
-}
 
 interface Props {
   repo: RepoInterface
 }
 
 const RepoItem: FC<Props> = ({ repo }) => {
+  // Add / remove star logic
   const [ addStar, { data: addStarData } ] = useMutation<AddStarResponseInterface>(ADD_STAR);
   const [ removeStar, { data: removeStarData } ] = useMutation<RemoveStarResponseInterface>(REMOVE_STAR);
-  // TODO implement removeStar!!!
-  // TODO change star based on return response as well? dedicated const isStarred, that depends on both
 
   // if mutated, switch to displaying value from the mutation response
   const [ isStarred, setIsStarred ] = useState<boolean | null>(repo.node.viewerHasStarred);
@@ -61,10 +27,11 @@ const RepoItem: FC<Props> = ({ repo }) => {
   const handleAddRemoveStar = (): void => {
     const mutationOptions = { variables: { repoId: repo.node.id } };
 
-
     isStarred ? removeStar(mutationOptions) : addStar(mutationOptions);
   };
+  // -------------------
 
+  // Last updated info
   const getUpdatedAtInfo = (): ReactNode => {
     const updatedAtDate = parseISO(repo.node.updatedAt);
 
@@ -81,8 +48,25 @@ const RepoItem: FC<Props> = ({ repo }) => {
       return <Text color={'gray.6'} fontSize={12}>Updated on {format(updatedAtDate, 'MMM dd')}</Text>;
     }
   };
+  // -------------------
 
+  // Render helpers
   const repoLink = `${repo.node.owner.url}/${repo.node.name}`;
+
+  const starButtonContent = (
+    <div>
+      <StarIcon size={16}/>
+      <Text color={'gray.6'} pl={1}>Star</Text>
+    </div>
+  );
+
+  const unStarButtonContent = (
+    <div>
+      <StarFillIcon size={16}/>
+      <Text color={'gray.6'} pl={1}>Unstar</Text>
+    </div>
+  );
+  // -------------------
 
   return (
     <Box
@@ -158,8 +142,7 @@ const RepoItem: FC<Props> = ({ repo }) => {
           color={'gray.6'}
           onClick={() => handleAddRemoveStar()}
         >
-          {isStarred ? <StarFillIcon size={16}/> : <StarIcon size={16}/>}
-          <Text color={'gray.6'} pl={1}>Star</Text>
+          {isStarred ? unStarButtonContent : starButtonContent}
         </Button>
       </Box>
     </Box>
